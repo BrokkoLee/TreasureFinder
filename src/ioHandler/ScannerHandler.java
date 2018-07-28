@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class FileInputHandler {
+public class ScannerHandler {
     public static void inputAllCreaturesToList(ArrayList<Enemy> creaturelist){
         try {
             Scanner text = new Scanner(new File("I:\\Progrik\\Joe\\src\\characters\\creatures"));
@@ -19,7 +19,6 @@ public class FileInputHandler {
             {
                 Character creature = new Enemy();
                 creature.name = text.next().substring(5);
-                System.out.println(text.next());
                 ((Enemy) creature).tier = Integer.parseInt(text.next().substring(5));
                 creature.health = Integer.parseInt(text.next().substring(7));
                 creature.attackDamage = Integer.parseInt(text.next().substring(13));
@@ -56,8 +55,7 @@ public class FileInputHandler {
     public static void inputAllPotionToList(ArrayList<Potion> potionlist){
         try {
             Scanner text = new Scanner(new File("I:\\Progrik\\Joe\\src\\characters\\items\\potions"));
-            while((text.hasNext()))
-            {
+            while((text.hasNext())) {
                 Item potion = new Potion();
                 potion.name = text.next().substring(5);
                 potion.tier = Integer.parseInt(text.next().substring(5));
