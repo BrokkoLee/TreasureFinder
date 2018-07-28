@@ -1,7 +1,5 @@
 package characters.items;
 
-public class Poition {
-    String name;
-    int healthGrow;
-
+public class Potion extends Item{
+    public int healthGrow;
 }

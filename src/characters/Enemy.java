@@ -1,5 +1,5 @@
-package charachters;
+package characters;
 
-public class Enemy{
-
+public class Enemy extends Character{
+    public int tier;
 }
