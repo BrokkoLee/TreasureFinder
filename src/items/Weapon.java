@@ -1,4 +1,4 @@
-package characters.items;
+package items;
 
 public class Weapon extends Item{
     public int damage;
