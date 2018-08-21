@@ -37,7 +37,9 @@ public class GameMaster {
 
             if ("Move".equals(choice)) {
                 OutputHandler.showNewLine();
-                map.showMap(player);
+
+                OutputHandler.showMap(player, map);
+
                 OutputHandler.showNewLine();
                 player.move(map, gameMaster);
                 OutputHandler.showNewLocation(player.x_cord, player.y_cord);
@@ -96,8 +98,6 @@ public class GameMaster {
 
     //TODO loadGame method
 
-    //TODO getRandomTier method
-
     private void battle(){
         int tier = getTier();
 
@@ -111,6 +111,7 @@ public class GameMaster {
     private void attackPhase(Enemy enemy){
         while (true){
             if (player.health <= 0) {
+                OutputHandler.playerDied();
                 playerLostGame();
                 return;
             } else if (enemy.health < 0){
@@ -126,8 +127,8 @@ public class GameMaster {
     }
 
     private void playerLostGame() {
-        OutputHandler.playerLost();
         String choice = InputHandler.getNewGameChoice();
+
         if (choice.equals("Yes")) {
             setDefaultStats();
         } else if (choice.equals("No")) {
@@ -135,7 +136,8 @@ public class GameMaster {
             System.exit(1);
         } else {
             OutputHandler.showWrongChoice();
-        } 
+            playerLostGame();
+        }
     }
 
     private int getTier() {
@@ -209,26 +211,22 @@ public class GameMaster {
     private Enemy getRandomCreature(int tier) {
         ArrayList<Enemy> creatureList = new ArrayList<>();
 
-        for (Enemy creature : this.creatureList) {
-            if (creature.tier == tier)
-                creatureList.add(creature);
-        }
+        for (Enemy creature : this.creatureList)
+            if (creature.tier == tier) creatureList.add(creature);
 
-        int randomIndex = (int)(Math.random() * creatureList.size()-1) + 1;
+            int randomIndex = (int)(Math.random() * creatureList.size() ) + 1;
 
-        return creatureList.get(randomIndex);
+        return creatureList.get(randomIndex-1);
     }
 
     private Item getRandomItem(int tier, ArrayList<Item> itemList){
         ArrayList<Item> randomSpecItems = new ArrayList<>();
 
-        for (Item item : itemList) {
-            if (item.tier == tier)
-                randomSpecItems.add(item);
-        }
+        for (Item item : itemList)
+            if (item.tier == tier) randomSpecItems.add(item);
 
-        int randomIndex = (int)(Math.random() * randomSpecItems.size()-1) + 1;
+        int randomIndex = (int)(Math.random() * randomSpecItems.size()) + 1;
 
-        return randomSpecItems.get(randomIndex);
+        return randomSpecItems.get(randomIndex-1);
     }
 }

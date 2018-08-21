@@ -6,6 +6,7 @@ import items.Item;
 import items.Potion;
 import characters.Player;
 import items.Weapon;
+import map.Map;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ public class OutputHandler {
         System.out.println("Good luck!");
     }
 
-    public static void showMissingtxt(String fileName){
+    public static void showMissingFile(String fileName){
         System.out.println("Missing file: " + fileName + ".txt" );
     }
 
@@ -185,7 +186,7 @@ public class OutputHandler {
         System.out.println(enemy.name + " blocked your attack\n");
     }
 
-    public static void playerLost() {
+    public static void playerDied() {
         System.out.println("You died!");
     }
 
@@ -199,5 +200,31 @@ public class OutputHandler {
 
     public static void showTurn(Character fighter) {
         System.out.println(fighter.name + "\'s turn:");
+    }
+
+    public static void showMap(Player player, Map map) {
+        boolean placedX = false;
+
+        for (int Y = map.maxY; Y >= 0; Y--) {
+            for (int X = 0; X <= map.maxX; X++) {
+                for (int[] xNy : map.wallPositionList) {
+                    placedX = false;
+                    if (xNy[0] == X && xNy[1] == Y) {
+                        System.out.print("XX");
+                        placedX = true;
+                        break;
+                    }
+                }
+                if (X == player.x_cord && Y == player.y_cord){
+                    System.out.print("OO");
+                    placedX = true;
+                }
+
+                if (!placedX) {
+                    System.out.print("  ");
+                }
+            }
+            System.out.println();
+        }
     }
 }

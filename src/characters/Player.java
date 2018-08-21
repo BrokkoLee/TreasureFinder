@@ -153,10 +153,11 @@ public class Player extends Character{
 
     public void attack(Enemy enemy) {
         int attackDamage = damage - enemy.blockDamage;
-
+        System.out.println("AttackDamage: " + attackDamage);
         if (attackDamage > 0){
-            OutputHandler.showPlayerDamageInfo(enemy, attackDamage);
+            System.out.println("Enemy Health: " + enemy.health);
             enemy.health -= attackDamage;
+            OutputHandler.showPlayerDamageInfo(enemy, attackDamage);
         } else {
             OutputHandler.showZeroPlayerDamage(enemy);
         }

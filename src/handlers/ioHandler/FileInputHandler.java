@@ -29,7 +29,7 @@ public class FileInputHandler {
             text.close();
 
         }catch (FileNotFoundException e){
-            OutputHandler.showMissingtxt("enemyCreatures");
+            OutputHandler.showMissingFile("enemyCreatures");
         }
     }
 
@@ -48,7 +48,7 @@ public class FileInputHandler {
             text.close();
 
         }catch (FileNotFoundException e){
-            OutputHandler.showMissingtxt("Weapon");
+            OutputHandler.showMissingFile("Weapon");
         }
     }
 
@@ -65,7 +65,7 @@ public class FileInputHandler {
             text.close();
 
         }catch (FileNotFoundException e){
-            OutputHandler.showMissingtxt("Potion");
+            OutputHandler.showMissingFile("Potion");
         }
     }
 
@@ -83,7 +83,7 @@ public class FileInputHandler {
             }
 
         }catch (FileNotFoundException e){
-            OutputHandler.showMissingtxt(fileName);
+            OutputHandler.showMissingFile(fileName);
         }
     }
 }
