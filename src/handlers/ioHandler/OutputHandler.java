@@ -154,7 +154,7 @@ public class OutputHandler {
     }
 
     public static void showExitGame(){
-        System.out.println("Thanks for playing the game.\n Bye!");
+        System.out.println("Thanks for playing the game.\nBye!");
     }
 
     public static void showNewLine(){

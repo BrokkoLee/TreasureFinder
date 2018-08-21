@@ -36,6 +36,9 @@ public class GameMaster {
             OutputHandler.showNewLine();
 
             if ("Move".equals(choice)) {
+                OutputHandler.showNewLine();
+                map.showMap(player);
+                OutputHandler.showNewLine();
                 player.move(map, gameMaster);
                 OutputHandler.showNewLocation(player.x_cord, player.y_cord);
             } else if ("Show_stats".equals(choice)) {
@@ -107,7 +110,7 @@ public class GameMaster {
 
     private void attackPhase(Enemy enemy){
         while (true){
-            if (player.health < 0) {
+            if (player.health <= 0) {
                 playerLostGame();
                 return;
             } else if (enemy.health < 0){
@@ -127,10 +130,12 @@ public class GameMaster {
         String choice = InputHandler.getNewGameChoice();
         if (choice.equals("Yes")) {
             setDefaultStats();
-        } else {
+        } else if (choice.equals("No")) {
             OutputHandler.showExitGame();
             System.exit(1);
-        }
+        } else {
+            OutputHandler.showWrongChoice();
+        } 
     }
 
     private int getTier() {
