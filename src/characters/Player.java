@@ -23,6 +23,8 @@ public class Player extends Character{
     }
 
     public void usePotion(){
+        boolean usedPotion = false;
+
         if (hasPotion(inventory)){
             OutputHandler.showYourPotions(inventory);
             String chosenPotionName = InputHandler.getPotionName();
@@ -36,8 +38,13 @@ public class Player extends Character{
                     inventory.remove(item);
                     OutputHandler.showUsedPotion(item.name);
                     OutputHandler.showHealthChange(health);
+                    usedPotion = true;
                     break;
                 }
+            }
+            if (!usedPotion) {
+                OutputHandler.showWrongChoice();
+                usePotion();
             }
         }else{
             OutputHandler.showZeroPotions();
@@ -54,8 +61,11 @@ public class Player extends Character{
     }
 
     public void changeWeapon(){
+        boolean hasChanged = false;
+
         OutputHandler.showYourWeapons(inventory);
         String chosenWeapon = InputHandler.getWeaponName();
+
         if (hasWeapon(inventory)){
             for (Item item : inventory) {
                 if(item.name.equals(chosenWeapon)){
@@ -66,9 +76,14 @@ public class Player extends Character{
                     weaponDamage = ((Weapon) item).damage;
                     setDamage();
                     OutputHandler.showChangedWeapon(item.name);
+                    hasChanged = true;
                     inventory.remove(item);
                     break;
                 }
+            }
+            if (!hasChanged) {
+                OutputHandler.showWrongChoice();
+                changeWeapon();
             }
         }else{
             OutputHandler.showZeroWeapons();
@@ -120,4 +135,30 @@ public class Player extends Character{
 
     }
 
+    @Override
+    public void attackPhase(Enemy enemy, Player player) {
+        OutputHandler.showTurn(player);
+
+        String choice = InputHandler.getAttackPhaseChoice();
+
+        if (choice.equals("Attack")) {
+            attack(enemy);
+        } else if (choice.equals("Use_potion")) {
+            usePotion();
+        } else {
+            OutputHandler.showWrongChoice();
+            attackPhase(enemy, player);
+        }
+    }
+
+    public void attack(Enemy enemy) {
+        int attackDamage = damage - enemy.blockDamage;
+
+        if (attackDamage > 0){
+            OutputHandler.showPlayerDamageInfo(enemy, attackDamage);
+            enemy.health -= attackDamage;
+        } else {
+            OutputHandler.showZeroPlayerDamage(enemy);
+        }
+    }
 }

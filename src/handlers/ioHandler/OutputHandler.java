@@ -1,5 +1,7 @@
 package handlers.ioHandler;
 
+import characters.Character;
+import characters.Enemy;
 import items.Item;
 import items.Potion;
 import characters.Player;
@@ -24,16 +26,22 @@ public class OutputHandler {
         System.out.print("The directions: North, South, East, West:" );
     }
 
-
     //------------ Choice -----------------
+
     public static void showChoices(){
         System.out.println("Enter what you want to do!");
         System.out.println("Move, Show_stats, Open_inventory, Use_potion, Change_weapon, Save_game, Exit_game");
         System.out.print("Enter your choice here: ");
     }
 
+    public static void showAttackPhaseChoices(){
+        System.out.println("Enter what you want to do!");
+        System.out.println("Attack, Use_potion");
+        System.out.print("Enter your choice here: ");
+    }
+
     public static void showWrongChoice(){
-        System.out.println("Please enter the choice name correctly!");
+        System.out.println("\nPlease enter the choice name correctly!\n");
     }
 
     //------------ Move ------------------
@@ -145,16 +153,51 @@ public class OutputHandler {
         System.out.println("Enter a new direction!");
     }
 
-    public static void showHitEnemy(){
-        System.out.println("Oops you met with something dangerous");
-        System.out.println("Prepare for BATTLE!");
-    }
-
     public static void showExitGame(){
         System.out.println("Thanks for playing the game.\n Bye!");
     }
 
     public static void showNewLine(){
         System.out.println();
+    }
+
+    public static void showEnteredBattle(Enemy enemy) {
+        System.out.println("\n" + enemy.name + " blocked your way");
+        System.out.println("Prepare for BATTLE!\n");
+    }
+
+    public static void showPlayerDamageInfo(Enemy enemy, int damage) {
+        System.out.println("\nYou attacked with: " + damage + " attack points");
+        System.out.println(enemy.name + "\'s health drops to " + enemy.health + " health points\n");
+    }
+
+    public static void showEnemyDamageInfo(Enemy enemy, Player player,int damage) {
+        System.out.println(enemy.name + " damaged you with " + damage + " attackDamage");
+        System.out.println("Your health changed to " + player.health + "\n");
+
+    }
+
+    public static void showZeroEnemyDamage(Enemy enemy) {
+        System.out.println("You blocked " + enemy.name + "\'s attack");
+    }
+
+    public static void showZeroPlayerDamage(Enemy enemy) {
+        System.out.println(enemy.name + " blocked your attack\n");
+    }
+
+    public static void playerLost() {
+        System.out.println("You died!");
+    }
+
+    public static void showNewGameChoice() {
+        System.out.print("Do you want to play again?(Yes/No): ");
+    }
+
+    public static void showDefeatedEnemy(Enemy enemy) {
+        System.out.println("You killed " + enemy.name + "!");
+    }
+
+    public static void showTurn(Character fighter) {
+        System.out.println(fighter.name + "\'s turn:");
     }
 }

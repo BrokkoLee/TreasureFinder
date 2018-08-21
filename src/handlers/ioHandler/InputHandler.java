@@ -10,6 +10,16 @@ public class InputHandler {
         return sc.next();
     }
 
+    public static String getNewGameChoice(){
+        OutputHandler.showNewGameChoice();
+        return sc.next();
+    }
+
+    public static String getAttackPhaseChoice(){
+        OutputHandler.showAttackPhaseChoices();
+        return sc.next();
+    }
+
     public static String getPotionName(){
         OutputHandler.showInputPotionName();
         return sc.next();

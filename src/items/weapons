@@ -1,23 +1,23 @@
 name:Brown_Stick
 tier:1
-damage:3
+damage:7
 
 name:White_Pebbles
 tier:1
-damage:4
+damage:9
 
 name:Kitchen_Knife
 tier:2
-damage:5
+damage:11
 
 name:Long_Sword
 tier:2
-damage:7
+damage:13
 
 name:Mace
 tier:3
-damage:7
+damage:15
 
 name:Demon_Sword
 tier:3
-damage:10
+damage:20
