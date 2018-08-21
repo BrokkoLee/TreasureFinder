@@ -36,15 +36,12 @@ public class GameMaster {
             OutputHandler.showNewLine();
 
             if ("Move".equals(choice)) {
-                OutputHandler.showNewLine();
-
                 OutputHandler.showMap(player, map);
-
-                OutputHandler.showNewLine();
                 player.move(map, gameMaster);
+                OutputHandler.showMap(player, map);
                 OutputHandler.showNewLocation(player.x_cord, player.y_cord);
             } else if ("Show_stats".equals(choice)) {
-                OutputHandler.showStats(player);
+                OutputHandler.showStats(player, map);
             } else if ("Open_inventory".equals(choice)) {
                 player.openInventory();
             } else if ("Change_weapon".equals(choice)) {
@@ -54,7 +51,7 @@ public class GameMaster {
             } else if ("Save_game".equals(choice)) {
                 saveGame();
             } else if ("Exit_game".equals(choice)) {
-                OutputHandler.showExitGame();
+                exitGame();
                 return;
             } else {
                 OutputHandler.showWrongChoice();
@@ -65,6 +62,8 @@ public class GameMaster {
     private void setDefaultStats(){
         player.name = InputHandler.getPlayerName();
 
+        player.x_cord = 7;
+        player.y_cord = 9;
         player.health = 10;
         player.handDamage = 5;
         player.blockDamage = 3;
@@ -110,33 +109,22 @@ public class GameMaster {
 
     private void attackPhase(Enemy enemy){
         while (true){
-            if (player.health <= 0) {
+            if (player.health > 0){
+                player.attackPhase(enemy, player);
+            } else {
                 OutputHandler.playerDied();
                 playerLostGame();
                 return;
-            } else if (enemy.health < 0){
+            }
+
+            if (enemy.health > 0) {
+                enemy.attackPhase(enemy, player);
+
                 OutputHandler.showDefeatedEnemy(enemy);
                 int[] playerCords = {player.x_cord, player.y_cord};
                 removeCords(playerCords, map.enemyPositionList);
                 return;
-            } else {
-                player.attackPhase(enemy, player);
-                enemy.attackPhase(enemy, player);
             }
-        }
-    }
-
-    private void playerLostGame() {
-        String choice = InputHandler.getNewGameChoice();
-
-        if (choice.equals("Yes")) {
-            setDefaultStats();
-        } else if (choice.equals("No")) {
-            OutputHandler.showExitGame();
-            System.exit(1);
-        } else {
-            OutputHandler.showWrongChoice();
-            playerLostGame();
         }
     }
 
@@ -168,6 +156,14 @@ public class GameMaster {
         }
     }
 
+    private boolean checkHitObject(ArrayList<int[]> list){
+        for (int[] xNy : list) {
+            if (player.x_cord == xNy[0] && player.y_cord == xNy[1]) return  true;
+        }
+
+        return false;
+    }
+
     private void hitWall(ArrayList<int[]> wallPositionsList, Map map, int oldXCord, int oldYCord, GameMaster gameMaster){
         for (int[] xNy : wallPositionsList) {
             while (xNy[0] == player.x_cord && xNy[1] == player.y_cord){
@@ -177,14 +173,6 @@ public class GameMaster {
                 player.move(map, gameMaster);
             }
         }
-    }
-
-    private boolean checkHitObject(ArrayList<int[]> list){
-        for (int[] xNy : list) {
-            if (player.x_cord == xNy[0] && player.y_cord == xNy[1]) return  true;
-        }
-
-        return false;
     }
 
     public void hitObject(Map map, int oldXCord, int oldYCord, GameMaster gameMaster){
@@ -200,6 +188,8 @@ public class GameMaster {
             pickUpItem(playerCords, potionList, map.potionPositionList);
         } else if (checkHitObject(map.wallPositionList)) {
             hitWall(map.wallPositionList, map, oldXCord, oldYCord, gameMaster);
+        } else if (checkHitObject(map.treasurePositionList)){
+            wonGame();
         }
 
     }
@@ -228,5 +218,29 @@ public class GameMaster {
         int randomIndex = (int)(Math.random() * randomSpecItems.size()) + 1;
 
         return randomSpecItems.get(randomIndex-1);
+    }
+
+    private void wonGame() {
+        OutputHandler.foundTreasure();
+        exitGame();
+    }
+
+    private void playerLostGame() {
+        String choice = InputHandler.getNewGameChoice();
+
+        if (choice.equals("Yes")) {
+            setDefaultStats();
+        } else if (choice.equals("No")) {
+            OutputHandler.showExitGame();
+            exitGame();
+        } else {
+            OutputHandler.showWrongChoice();
+            playerLostGame();
+        }
+    }
+
+    private void exitGame() {
+        OutputHandler.showExitGame();
+        System.exit(1);
     }
 }

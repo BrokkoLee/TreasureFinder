@@ -132,7 +132,6 @@ public class Player extends Character{
         }
 
         gameMaster.hitObject(map, oldXCord, oldYCord, gameMaster);
-
     }
 
     @Override

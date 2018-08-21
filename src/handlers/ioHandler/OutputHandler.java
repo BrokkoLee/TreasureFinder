@@ -124,7 +124,7 @@ public class OutputHandler {
         System.out.println("Your health changed to " + health);
     }
 
-    public static void showStats(Player player){
+    public static void showStats(Player player, Map map){
         System.out.println("Your stats:");
         System.out.println("Name: " + player.name);
         System.out.println("Max health: " + player.maxHealth);
@@ -136,7 +136,8 @@ public class OutputHandler {
         }
         System.out.println("Damage: " + player.damage);
         System.out.println("Blocking: " + player.blockDamage);
-        System.out.println("Position: X: " + player.x_cord + " Y: " + player.y_cord);
+        System.out.print("Position: X: " + player.x_cord + " Y: " + player.y_cord);
+        OutputHandler.showMap(player, map);
     }
 
     //------------ Other -----------------
@@ -205,6 +206,7 @@ public class OutputHandler {
     public static void showMap(Player player, Map map) {
         boolean placedX = false;
 
+        System.out.println();
         for (int Y = map.maxY; Y >= 0; Y--) {
             for (int X = 0; X <= map.maxX; X++) {
                 for (int[] xNy : map.wallPositionList) {
@@ -226,5 +228,10 @@ public class OutputHandler {
             }
             System.out.println();
         }
+        System.out.println();
+    }
+
+    public static void foundTreasure() {
+        System.out.println("You found The Lost Treasure!\nCongratulations!");
     }
 }
