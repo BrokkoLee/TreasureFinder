@@ -3,6 +3,7 @@ package handlers.gameHandler;
 import characters.Enemy;
 import characters.Player;
 import items.Item;
+import items.Weapon;
 import handlers.ioHandler.InputHandler;
 import handlers.ioHandler.OutputHandler;
 import handlers.ioHandler.FileInputHandler;
@@ -36,10 +37,7 @@ public class GameMaster {
             OutputHandler.showNewLine();
 
             if ("Move".equals(choice)) {
-                OutputHandler.showMap(player, map);
-                player.move(map, gameMaster);
-                OutputHandler.showMap(player, map);
-                OutputHandler.showNewLocation(player.x_cord, player.y_cord);
+                player.move(player, map, gameMaster);
             } else if ("Show_stats".equals(choice)) {
                 OutputHandler.showStats(player, map);
             } else if ("Open_inventory".equals(choice)) {
@@ -48,8 +46,6 @@ public class GameMaster {
                 player.changeWeapon();
             } else if ("Use_potion".equals(choice)) {
                 player.usePotion();
-            } else if ("Save_game".equals(choice)) {
-                saveGame();
             } else if ("Exit_game".equals(choice)) {
                 exitGame();
                 return;
@@ -62,11 +58,13 @@ public class GameMaster {
     private void setDefaultStats(){
         player.name = InputHandler.getPlayerName();
 
-        player.x_cord = 7;
-        player.y_cord = 9;
+        player.x_cord = 1;
+        player.y_cord = 1;
         player.health = 10;
         player.handDamage = 5;
         player.blockDamage = 3;
+        player.currentWeapon = new Weapon();
+
 
         addItemToInventory(weaponList.get(0), player.inventory);
         addItemToInventory(weaponList.get(1), player.inventory);
@@ -90,24 +88,18 @@ public class GameMaster {
         FileInputHandler.inputAllCreaturesToList(creatureList);
     }
 
-    private void saveGame(){
-        //TODO write current data to file
-        //TODO add loadGame method
-    }
-
-    //TODO loadGame method
-
     private void battle(){
         int tier = getTier();
 
         Enemy enemy = getRandomCreature(tier);
 
         OutputHandler.showEnteredBattle(enemy);
+        OutputHandler.showEnemyInfo(enemy);
 
         attackPhase(enemy);
     }
 
-    private void attackPhase(Enemy enemy){
+    private void attackPhase(Enemy enemy ){
         while (true){
             if (player.health > 0){
                 player.attackPhase(enemy, player);
@@ -119,7 +111,7 @@ public class GameMaster {
 
             if (enemy.health > 0) {
                 enemy.attackPhase(enemy, player);
-
+            } else {
                 OutputHandler.showDefeatedEnemy(enemy);
                 int[] playerCords = {player.x_cord, player.y_cord};
                 removeCords(playerCords, map.enemyPositionList);
@@ -170,7 +162,7 @@ public class GameMaster {
                 player.x_cord = oldXCord;
                 player.y_cord = oldYCord;
                 OutputHandler.showHitWall();
-                player.move(map, gameMaster);
+                player.move(player, map, gameMaster);
             }
         }
     }
@@ -231,7 +223,6 @@ public class GameMaster {
         if (choice.equals("Yes")) {
             setDefaultStats();
         } else if (choice.equals("No")) {
-            OutputHandler.showExitGame();
             exitGame();
         } else {
             OutputHandler.showWrongChoice();

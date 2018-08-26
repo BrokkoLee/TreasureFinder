@@ -124,6 +124,12 @@ public class OutputHandler {
         System.out.println("Your health changed to " + health);
     }
 
+    //------------ Other -----------------
+
+    public static void showInputPlayerName() {
+        System.out.print("Enter your hero name:");
+    }
+
     public static void showStats(Player player, Map map){
         System.out.println("Your stats:");
         System.out.println("Name: " + player.name);
@@ -138,12 +144,6 @@ public class OutputHandler {
         System.out.println("Blocking: " + player.blockDamage);
         System.out.print("Position: X: " + player.x_cord + " Y: " + player.y_cord);
         OutputHandler.showMap(player, map);
-    }
-
-    //------------ Other -----------------
-
-    public static void showInputPlayerName() {
-        System.out.print("Enter your hero name:");
     }
 
     public static void showPickedUpItem(Item item){
@@ -207,6 +207,7 @@ public class OutputHandler {
         boolean placedX = false;
 
         System.out.println();
+
         for (int Y = map.maxY; Y >= 0; Y--) {
             for (int X = 0; X <= map.maxX; X++) {
                 for (int[] xNy : map.wallPositionList) {
@@ -232,6 +233,13 @@ public class OutputHandler {
     }
 
     public static void foundTreasure() {
-        System.out.println("You found The Lost Treasure!\nCongratulations!");
+        System.out.println("\nYou found The Lost Treasure!\nCongratulations!");
+    }
+
+    public static void showEnemyInfo(Enemy enemy) {
+        System.out.println("Your enemy info:");
+        System.out.println("Name: " + enemy.name);
+        System.out.println("Attack damage: " + enemy.damage);
+        System.out.println("Blocking: " + enemy.blockDamage + "\n");
     }
 }

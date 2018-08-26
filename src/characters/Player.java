@@ -107,11 +107,13 @@ public class Player extends Character{
         }
     }
 
-    public void move(Map map, GameMaster gameMaster){
+    public void move(Player player, Map map, GameMaster gameMaster){
         int oldXCord = x_cord;
         int oldYCord = y_cord;
 
         OutputHandler.showCurrentLocation(x_cord, y_cord);
+        OutputHandler.showMap(player, map);
+
 
         String direction = InputHandler.getDirection();
         if ("North".equals(direction)) {
@@ -128,10 +130,15 @@ public class Player extends Character{
 
         } else {
             OutputHandler.showWrongDirection();
-            move(map, gameMaster);
+            move(player, map, gameMaster);
         }
 
         gameMaster.hitObject(map, oldXCord, oldYCord, gameMaster);
+
+        OutputHandler.showMap(player, map);
+        OutputHandler.showNewLocation(player.x_cord, player.y_cord);
+
+
     }
 
     @Override
@@ -152,9 +159,8 @@ public class Player extends Character{
 
     public void attack(Enemy enemy) {
         int attackDamage = damage - enemy.blockDamage;
-        System.out.println("AttackDamage: " + attackDamage);
+
         if (attackDamage > 0){
-            System.out.println("Enemy Health: " + enemy.health);
             enemy.health -= attackDamage;
             OutputHandler.showPlayerDamageInfo(enemy, attackDamage);
         } else {

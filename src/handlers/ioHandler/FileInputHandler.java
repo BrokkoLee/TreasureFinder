@@ -17,13 +17,13 @@ public class FileInputHandler {
             Scanner text = new Scanner(new File("I:\\Progrik\\Joe\\src\\characters\\enemyCreatures"));
             while((text.hasNext()))
             {
-                Character creature = new Enemy();
+                Enemy creature = new Enemy();
                 creature.name = text.next().substring(5);
-                ((Enemy) creature).tier = Integer.parseInt(text.next().substring(5));
+                creature.tier = Integer.parseInt(text.next().substring(5));
                 creature.health = Integer.parseInt(text.next().substring(7));
-                ((Enemy) creature).damage = Integer.parseInt(text.next().substring(13));
+                creature.damage = Integer.parseInt(text.next().substring(13));
                 creature.blockDamage = Integer.parseInt(text.next().substring(12));
-                creaturelist.add((Enemy) creature);
+                creaturelist.add(creature);
             }
 
             text.close();
@@ -38,11 +38,11 @@ public class FileInputHandler {
             Scanner text = new Scanner(new File("I:\\Progrik\\Joe\\src\\items\\weapons"));
             while((text.hasNext()))
             {
-                Item weapon = new Weapon();
+                Weapon weapon = new Weapon();
                 weapon.name = text.next().substring(5);
                 weapon.tier = Integer.parseInt(text.next().substring(5));
-                ((Weapon) weapon).damage = Integer.parseInt(text.next().substring(7));
-                weaponlist.add((Weapon) weapon);
+                weapon.damage = Integer.parseInt(text.next().substring(7));
+                weaponlist.add(weapon);
             }
 
             text.close();
@@ -56,11 +56,11 @@ public class FileInputHandler {
         try {
             Scanner text = new Scanner(new File("I:\\Progrik\\Joe\\src\\items\\potions"));
             while((text.hasNext())) {
-                Item potion = new Potion();
+                Potion potion = new Potion();
                 potion.name = text.next().substring(5);
                 potion.tier = Integer.parseInt(text.next().substring(5));
-                ((Potion) potion).healthGrow = Integer.parseInt(text.next().substring(11));
-                potionlist.add((Potion) potion);
+                potion.healthGrow = Integer.parseInt(text.next().substring(11));
+                potionlist.add(potion);
             }
             text.close();
 

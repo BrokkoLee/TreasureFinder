@@ -32,7 +32,7 @@ public class InputHandler {
 
     public static String getPlayerName(){
         OutputHandler.showInputPlayerName();
-        return sc.nextLine();
+        return sc.next();
     }
 
     public static String getDirection(){
