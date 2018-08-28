@@ -63,10 +63,11 @@ public class Player extends Character{
     public void changeWeapon(){
         boolean hasChanged = false;
 
-        OutputHandler.showYourWeapons(inventory);
-        String chosenWeapon = InputHandler.getWeaponName();
 
         if (hasWeapon(inventory)){
+            OutputHandler.showYourWeapons(inventory);
+            String chosenWeapon = InputHandler.getWeaponName();
+
             for (Item item : inventory) {
                 if(item.name.equals(chosenWeapon)){
                     if (currentWeapon != null){
@@ -85,17 +86,18 @@ public class Player extends Character{
                 OutputHandler.showWrongChoice();
                 changeWeapon();
             }
+
         }else{
             OutputHandler.showZeroWeapons();
         }
     }
 
     private boolean hasWeapon(ArrayList<Item> inventory){
-        boolean weapon = false;
+        boolean hasWeapon = false;
         for (Item item : inventory) {
-            if(item instanceof Weapon) weapon = true;
+            if(item instanceof Weapon) hasWeapon = true;
         }
-        return weapon;
+        return hasWeapon;
     }
 
     public void openInventory(){
@@ -112,30 +114,32 @@ public class Player extends Character{
         int oldYCord = y_cord;
 
         OutputHandler.showCurrentLocation(x_cord, y_cord);
-        OutputHandler.showMap(player, map);
+        OutputHandler.showDirections();
 
-
-        String direction = InputHandler.getDirection();
-        if ("North".equals(direction)) {
-            y_cord += 1;
-
-        } else if ("South".equals(direction)) {
-            y_cord -= 1;
-
-        } else if ("West".equals(direction)) {
-            x_cord += -1;
-
-        } else if ("East".equals(direction)) {
-            x_cord += 1;
-
-        } else {
-            OutputHandler.showWrongDirection();
-            move(player, map, gameMaster);
+        boolean hasMoved = false;
+        while (!hasMoved) {
+            String direction = InputHandler.getDirection();
+            if ("North".equals(direction)) {
+                y_cord += 1;
+                hasMoved = true;
+            } else if ("South".equals(direction)) {
+                y_cord -= 1;
+                hasMoved = true;
+            } else if ("West".equals(direction)) {
+                x_cord += -1;
+                hasMoved = true;
+            } else if ("East".equals(direction)) {
+                x_cord += 1;
+                hasMoved = true;
+            } else {
+                OutputHandler.showWrongDirection();
+                OutputHandler.showDirections();
+            }
         }
+
 
         gameMaster.hitObject(map, oldXCord, oldYCord, gameMaster);
 
-        OutputHandler.showMap(player, map);
         OutputHandler.showNewLocation(player.x_cord, player.y_cord);
 
 
@@ -157,7 +161,7 @@ public class Player extends Character{
         }
     }
 
-    public void attack(Enemy enemy) {
+    private void attack(Enemy enemy) {
         int attackDamage = damage - enemy.blockDamage;
 
         if (attackDamage > 0){

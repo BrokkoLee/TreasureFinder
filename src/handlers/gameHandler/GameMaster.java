@@ -46,6 +46,9 @@ public class GameMaster {
                 player.changeWeapon();
             } else if ("Use_potion".equals(choice)) {
                 player.usePotion();
+            } else if ("Show_map".equals(choice)) {
+                OutputHandler.showCurrentLocation(player.x_cord, player.y_cord);
+                OutputHandler.showMap(player, map);
             } else if ("Exit_game".equals(choice)) {
                 exitGame();
                 return;
@@ -63,12 +66,8 @@ public class GameMaster {
         player.health = 10;
         player.handDamage = 5;
         player.blockDamage = 3;
-        player.currentWeapon = new Weapon();
-
-
-        addItemToInventory(weaponList.get(0), player.inventory);
-        addItemToInventory(weaponList.get(1), player.inventory);
-        addItemToInventory(potionList.get(0), player.inventory);
+        player.currentWeapon = null;
+        player.inventory = new ArrayList<>();
 
         player.setDamage();
     }
@@ -192,13 +191,15 @@ public class GameMaster {
 
     private Enemy getRandomCreature(int tier) {
         ArrayList<Enemy> creatureList = new ArrayList<>();
+        Enemy enemy;
 
         for (Enemy creature : this.creatureList)
             if (creature.tier == tier) creatureList.add(creature);
 
             int randomIndex = (int)(Math.random() * creatureList.size() ) + 1;
 
-        return creatureList.get(randomIndex-1);
+        enemy = creatureList.get(randomIndex-1);
+        return enemy;
     }
 
     private Item getRandomItem(int tier, ArrayList<Item> itemList){

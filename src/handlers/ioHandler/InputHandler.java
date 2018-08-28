@@ -36,7 +36,7 @@ public class InputHandler {
     }
 
     public static String getDirection(){
-        OutputHandler.showDirections();
+        OutputHandler.showMoveChoice();
         return sc.next();
     }
 }

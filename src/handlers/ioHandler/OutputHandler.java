@@ -14,8 +14,8 @@ public class OutputHandler {
 
     public static void introduction(){
         System.out.println("Welcome to TreasureFinder!");
-        System.out.println("Your aim is to find the lost treasure.");
-        System.out.println("In the way of your aim you have to fight with evil creatures to move on.");
+        System.out.println("Your goal is to find the lost treasure.");
+        System.out.println("On your journey you will have to fight with different creatures.");
         System.out.println("Good luck!");
     }
 
@@ -24,14 +24,18 @@ public class OutputHandler {
     }
 
     public static void showDirections(){
-        System.out.print("The directions: North, South, East, West:" );
+        System.out.print("The directions: North, South, East, West!\n" );
     }
 
     //------------ Choice -----------------
 
+    public static void showMoveChoice() {
+        System.out.print("Enter your choice here:");
+    }
+
     public static void showChoices(){
         System.out.println("Enter what you want to do!");
-        System.out.println("Move, Show_stats, Open_inventory, Use_potion, Change_weapon, Save_game, Exit_game");
+        System.out.println("Move, Show_stats, Open_inventory, Use_potion, Change_weapon, Show_map, Exit_game");
         System.out.print("Enter your choice here: ");
     }
 
@@ -142,8 +146,7 @@ public class OutputHandler {
         }
         System.out.println("Damage: " + player.damage);
         System.out.println("Blocking: " + player.blockDamage);
-        System.out.print("Position: X: " + player.x_cord + " Y: " + player.y_cord);
-        OutputHandler.showMap(player, map);
+        System.out.println("Position: X: " + player.x_cord + " Y: " + player.y_cord);
     }
 
     public static void showPickedUpItem(Item item){
@@ -204,9 +207,10 @@ public class OutputHandler {
     }
 
     public static void showMap(Player player, Map map) {
-        boolean placedX = false;
+        System.out.println("------------ Map -----------");
+        System.out.println("Your position : OO \nWalls position : XX");
 
-        System.out.println();
+        boolean placedX = false;
 
         for (int Y = map.maxY; Y >= 0; Y--) {
             for (int X = 0; X <= map.maxX; X++) {
@@ -229,7 +233,6 @@ public class OutputHandler {
             }
             System.out.println();
         }
-        System.out.println();
     }
 
     public static void foundTreasure() {
@@ -239,6 +242,7 @@ public class OutputHandler {
     public static void showEnemyInfo(Enemy enemy) {
         System.out.println("Your enemy info:");
         System.out.println("Name: " + enemy.name);
+        System.out.println("Health: " + enemy.health);
         System.out.println("Attack damage: " + enemy.damage);
         System.out.println("Blocking: " + enemy.blockDamage + "\n");
     }
