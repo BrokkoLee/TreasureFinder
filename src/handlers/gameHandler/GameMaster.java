@@ -79,12 +79,12 @@ public class GameMaster {
     }
 
     private void loadItems(){
-        FileInputHandler.inputAllWeaponToList(weaponList);
-        FileInputHandler.inputAllPotionToList(potionList);
+        FileInputHandler.inputAllWeaponToList(weaponList, "weapons");
+        FileInputHandler.inputAllPotionToList(potionList, "potions");
     }
 
     private void loadCreatures(){
-        FileInputHandler.inputAllCreaturesToList(creatureList);
+        FileInputHandler.inputAllCreaturesToList(creatureList, "enemyCreatures");
     }
 
     private void battle(){

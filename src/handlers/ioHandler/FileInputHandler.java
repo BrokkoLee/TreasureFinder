@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class FileInputHandler {
-    public static void inputAllCreaturesToList(ArrayList<Enemy> creaturelist){
+    private static String url = ".\\resources\\" ;
+
+    public static void inputAllCreaturesToList(ArrayList<Enemy> creaturelist, String fileName){
         try {
-            Scanner text = new Scanner(new File("I:\\Progrik\\Joe\\src\\characters\\enemyCreatures"));
+            Scanner text = new Scanner(new File(url + fileName));
             while((text.hasNext()))
             {
                 Enemy creature = new Enemy();
@@ -29,13 +31,13 @@ public class FileInputHandler {
             text.close();
 
         }catch (FileNotFoundException e){
-            OutputHandler.showMissingFile("enemyCreatures");
+            OutputHandler.showMissingFile(fileName);
         }
     }
 
-    public static void inputAllWeaponToList(ArrayList<Item> weaponlist){
+    public static void inputAllWeaponToList(ArrayList<Item> weaponlist, String fileName){
         try {
-            Scanner text = new Scanner(new File("I:\\Progrik\\Joe\\src\\items\\weapons"));
+            Scanner text = new Scanner(new File(url + fileName));
             while((text.hasNext()))
             {
                 Weapon weapon = new Weapon();
@@ -48,13 +50,13 @@ public class FileInputHandler {
             text.close();
 
         }catch (FileNotFoundException e){
-            OutputHandler.showMissingFile("Weapon");
+            OutputHandler.showMissingFile(fileName);
         }
     }
 
-    public static void inputAllPotionToList(ArrayList<Item> potionlist){
+    public static void inputAllPotionToList(ArrayList<Item> potionlist, String fileName){
         try {
-            Scanner text = new Scanner(new File("I:\\Progrik\\Joe\\src\\items\\potions"));
+            Scanner text = new Scanner(new File(url + fileName));
             while((text.hasNext())) {
                 Potion potion = new Potion();
                 potion.name = text.next().substring(5);
@@ -65,14 +67,14 @@ public class FileInputHandler {
             text.close();
 
         }catch (FileNotFoundException e){
-            OutputHandler.showMissingFile("Potion");
+            OutputHandler.showMissingFile(fileName);
         }
     }
 
-    public static void inputPositionsToList(ArrayList<int[]> list, String fileName, String filePath){
+    public static void inputPositionsToList(ArrayList<int[]> list, String fileName){
         try{
             int[] xy_cord;
-            Scanner text = new Scanner(new File(filePath));
+            Scanner text = new Scanner(new File(url + fileName));
 
             while (text.hasNext()){
                 text.nextLine();
