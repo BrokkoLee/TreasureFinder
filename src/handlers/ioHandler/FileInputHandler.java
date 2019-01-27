@@ -4,7 +4,6 @@ import characters.Enemy;
 import items.Item;
 import items.Potion;
 import items.Weapon;
-import characters.Character;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,8 +12,9 @@ import java.util.Scanner;
 
 public class FileInputHandler {
     private static String url = ".\\resources\\" ;
+    public static boolean fileMissing = false;
 
-    public static void inputAllCreaturesToList(ArrayList<Enemy> creaturelist, String fileName){
+    public static void inputAllCreaturesToList(ArrayList<Enemy> creatureList, String fileName){
         try {
             Scanner text = new Scanner(new File(url + fileName));
             while((text.hasNext()))
@@ -25,17 +25,18 @@ public class FileInputHandler {
                 creature.health = Integer.parseInt(text.next().substring(7));
                 creature.damage = Integer.parseInt(text.next().substring(13));
                 creature.blockDamage = Integer.parseInt(text.next().substring(12));
-                creaturelist.add(creature);
+                creatureList.add(creature);
             }
 
             text.close();
 
         }catch (FileNotFoundException e){
             OutputHandler.showMissingFile(fileName);
+            fileMissing = true;
         }
     }
 
-    public static void inputAllWeaponToList(ArrayList<Item> weaponlist, String fileName){
+    public static void inputAllWeaponToList(ArrayList<Item> weaponList, String fileName){
         try {
             Scanner text = new Scanner(new File(url + fileName));
             while((text.hasNext()))
@@ -44,17 +45,18 @@ public class FileInputHandler {
                 weapon.name = text.next().substring(5);
                 weapon.tier = Integer.parseInt(text.next().substring(5));
                 weapon.damage = Integer.parseInt(text.next().substring(7));
-                weaponlist.add(weapon);
+                weaponList.add(weapon);
             }
 
             text.close();
 
         }catch (FileNotFoundException e){
             OutputHandler.showMissingFile(fileName);
+            fileMissing = true;
         }
     }
 
-    public static void inputAllPotionToList(ArrayList<Item> potionlist, String fileName){
+    public static void inputAllPotionToList(ArrayList<Item> potionList, String fileName){
         try {
             Scanner text = new Scanner(new File(url + fileName));
             while((text.hasNext())) {
@@ -62,12 +64,13 @@ public class FileInputHandler {
                 potion.name = text.next().substring(5);
                 potion.tier = Integer.parseInt(text.next().substring(5));
                 potion.healthGrow = Integer.parseInt(text.next().substring(11));
-                potionlist.add(potion);
+                potionList.add(potion);
             }
             text.close();
 
         }catch (FileNotFoundException e){
             OutputHandler.showMissingFile(fileName);
+            fileMissing = true;
         }
     }
 
@@ -86,6 +89,7 @@ public class FileInputHandler {
 
         }catch (FileNotFoundException e){
             OutputHandler.showMissingFile(fileName);
+            fileMissing = true;
         }
     }
 }

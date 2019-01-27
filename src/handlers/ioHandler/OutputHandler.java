@@ -202,8 +202,8 @@ public class OutputHandler {
         System.out.println("You killed " + enemy.name + "!");
     }
 
-    public static void showTurn(Character fighter) {
-        System.out.println(fighter.name + "\'s turn:");
+    public static void showTurn(Character character) {
+        System.out.println(character.name + "\'s turn:");
     }
 
     public static void showMap(Player player, Map map) {

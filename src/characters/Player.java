@@ -109,7 +109,7 @@ public class Player extends Character{
         }
     }
 
-    public void move(Player player, Map map, GameMaster gameMaster){
+    public void move(Map map, GameMaster gameMaster){
         int oldXCord = x_cord;
         int oldYCord = y_cord;
 
@@ -138,16 +138,16 @@ public class Player extends Character{
         }
 
 
-        gameMaster.hitObject(map, oldXCord, oldYCord, gameMaster);
+        gameMaster.hitObject(map, oldXCord, oldYCord);
 
-        OutputHandler.showNewLocation(player.x_cord, player.y_cord);
+        OutputHandler.showNewLocation(x_cord, y_cord);
 
 
     }
 
     @Override
     public void attackPhase(Enemy enemy, Player player) {
-        OutputHandler.showTurn(player);
+        OutputHandler.showTurn(this);
 
         String choice = InputHandler.getAttackPhaseChoice();
 
@@ -157,7 +157,7 @@ public class Player extends Character{
             usePotion();
         } else {
             OutputHandler.showWrongChoice();
-            attackPhase(enemy, player);
+            attackPhase(enemy, this);
         }
     }
 

@@ -2,8 +2,8 @@ package handlers.gameHandler;
 
 import characters.Enemy;
 import characters.Player;
+import handlers.ioHandler.Command;
 import items.Item;
-import items.Weapon;
 import handlers.ioHandler.InputHandler;
 import handlers.ioHandler.OutputHandler;
 import handlers.ioHandler.FileInputHandler;
@@ -17,48 +17,53 @@ public class GameMaster {
     private ArrayList<Item> potionList = new ArrayList<>();
     private ArrayList<Enemy> creatureList = new ArrayList<>();
     private Map map = new Map();
-    private Player player;
+    private Player player = new Player();
 
-    public GameMaster(Player player) {
-        this.player = player;
-    }
-
-    public void playGame(GameMaster gameMaster){
+    public void playGame(){
         loadData();
         setDefaultStats();
         OutputHandler.introduction();
-        runGame(gameMaster);
+        runGame();
     }
 
-    private void runGame(GameMaster gameMaster){
+    private void runGame(){
         while (true){
             OutputHandler.showNewLine();
-            String choice = InputHandler.getChoice();
+            Command choice = InputHandler.getChoice();
             OutputHandler.showNewLine();
 
-            if ("Move".equals(choice)) {
-                player.move(player, map, gameMaster);
-            } else if ("Show_stats".equals(choice)) {
-                OutputHandler.showStats(player, map);
-            } else if ("Open_inventory".equals(choice)) {
-                player.openInventory();
-            } else if ("Change_weapon".equals(choice)) {
-                player.changeWeapon();
-            } else if ("Use_potion".equals(choice)) {
-                player.usePotion();
-            } else if ("Show_map".equals(choice)) {
-                OutputHandler.showCurrentLocation(player.x_cord, player.y_cord);
-                OutputHandler.showMap(player, map);
-            } else if ("Exit_game".equals(choice)) {
-                exitGame();
-                return;
-            } else {
-                OutputHandler.showWrongChoice();
+            switch (choice) {
+                case move:
+                    player.move(map, this);
+                    break;
+                case stats:
+                    OutputHandler.showStats(player, map);
+                    break;
+                case inventory:
+                    player.openInventory();
+                    break;
+                case weapon:
+                    player.changeWeapon();
+                    break;
+                case potion:
+                    player.usePotion();
+                    break;
+                case map:
+                    OutputHandler.showCurrentLocation(player.x_cord, player.y_cord);
+                    OutputHandler.showMap(player, map);
+                    break;
+                case exit:
+                    exitGame();
+                    return;
+                default:
+                    OutputHandler.showWrongChoice();
+                    break;
             }
         }
     }
 
     private void setDefaultStats(){
+        //TODO input default stats from file
         player.name = InputHandler.getPlayerName();
 
         player.x_cord = 1;
@@ -72,10 +77,18 @@ public class GameMaster {
         player.setDamage();
     }
 
+    private void stopGameIfMissingFile() {
+        if (FileInputHandler.fileMissing){
+            System.exit(1);
+        }
+    }
+
     private void loadData(){
         map.loadLocations();
         loadItems();
         loadCreatures();
+        //TODO throws error if missing file
+        stopGameIfMissingFile();
     }
 
     private void loadItems(){
@@ -99,13 +112,14 @@ public class GameMaster {
     }
 
     private void attackPhase(Enemy enemy ){
+        //TODO remove forever loop
         while (true){
             if (player.health > 0){
                 player.attackPhase(enemy, player);
             } else {
                 OutputHandler.playerDied();
                 playerLostGame();
-                return;
+                break;
             }
 
             if (enemy.health > 0) {
@@ -114,7 +128,7 @@ public class GameMaster {
                 OutputHandler.showDefeatedEnemy(enemy);
                 int[] playerCords = {player.x_cord, player.y_cord};
                 removeCords(playerCords, map.enemyPositionList);
-                return;
+                break;
             }
         }
     }
@@ -155,18 +169,19 @@ public class GameMaster {
         return false;
     }
 
-    private void hitWall(ArrayList<int[]> wallPositionsList, Map map, int oldXCord, int oldYCord, GameMaster gameMaster){
+    private void hitWall(ArrayList<int[]> wallPositionsList, Map map, int oldXCord, int oldYCord){
+        //TODO create new class for coordination
         for (int[] xNy : wallPositionsList) {
             while (xNy[0] == player.x_cord && xNy[1] == player.y_cord){
                 player.x_cord = oldXCord;
                 player.y_cord = oldYCord;
                 OutputHandler.showHitWall();
-                player.move(player, map, gameMaster);
+                player.move(map, this);
             }
         }
     }
 
-    public void hitObject(Map map, int oldXCord, int oldYCord, GameMaster gameMaster){
+    public void hitObject(Map map, int oldXCord, int oldYCord){
         int[] playerCords = new int[2];
         playerCords[0] = player.x_cord;
         playerCords[1] = player.y_cord;
@@ -178,7 +193,7 @@ public class GameMaster {
         } else if (checkHitObject(map.potionPositionList)) {
             pickUpItem(playerCords, potionList, map.potionPositionList);
         } else if (checkHitObject(map.wallPositionList)) {
-            hitWall(map.wallPositionList, map, oldXCord, oldYCord, gameMaster);
+            hitWall(map.wallPositionList, map, oldXCord, oldYCord);
         } else if (checkHitObject(map.treasurePositionList)){
             wonGame();
         }
