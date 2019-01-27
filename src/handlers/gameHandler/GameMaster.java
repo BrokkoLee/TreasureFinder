@@ -13,14 +13,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GameMaster {
-    private ArrayList<Item> weaponList = new ArrayList<>();
-    private ArrayList<Item> potionList = new ArrayList<>();
-    private ArrayList<Enemy> creatureList = new ArrayList<>();
+
     private Map map = new Map();
     private Player player = new Player();
+    private DataHandler dataHandler = new DataHandler();
 
     public void playGame(){
-        loadData();
+        dataHandler.loadData(map);
         setDefaultStats();
         OutputHandler.introduction();
         runGame();
@@ -81,23 +80,6 @@ public class GameMaster {
         if (FileInputHandler.fileMissing){
             System.exit(1);
         }
-    }
-
-    private void loadData(){
-        map.loadLocations();
-        loadItems();
-        loadCreatures();
-        //TODO throws error if missing file
-        stopGameIfMissingFile();
-    }
-
-    private void loadItems(){
-        FileInputHandler.inputAllWeaponToList(weaponList, "weapons");
-        FileInputHandler.inputAllPotionToList(potionList, "potions");
-    }
-
-    private void loadCreatures(){
-        FileInputHandler.inputAllCreaturesToList(creatureList, "enemyCreatures");
     }
 
     private void battle(){
@@ -189,9 +171,9 @@ public class GameMaster {
         if (checkHitObject(map.enemyPositionList)){
             battle();
         } else if (checkHitObject(map.weaponPositionList)){
-            pickUpItem(playerCords, weaponList, map.weaponPositionList);
+            pickUpItem(playerCords, dataHandler.weaponList, map.weaponPositionList);
         } else if (checkHitObject(map.potionPositionList)) {
-            pickUpItem(playerCords, potionList, map.potionPositionList);
+            pickUpItem(playerCords, dataHandler.potionList, map.potionPositionList);
         } else if (checkHitObject(map.wallPositionList)) {
             hitWall(map.wallPositionList, map, oldXCord, oldYCord);
         } else if (checkHitObject(map.treasurePositionList)){
@@ -208,7 +190,7 @@ public class GameMaster {
         ArrayList<Enemy> creatureList = new ArrayList<>();
         Enemy enemy;
 
-        for (Enemy creature : this.creatureList)
+        for (Enemy creature : dataHandler.creatureList)
             if (creature.tier == tier) creatureList.add(creature);
 
             int randomIndex = (int)(Math.random() * creatureList.size() ) + 1;
