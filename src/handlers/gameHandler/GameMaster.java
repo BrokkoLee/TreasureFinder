@@ -2,6 +2,7 @@ package handlers.gameHandler;
 
 import characters.Enemy;
 import characters.Player;
+import com.sun.xml.internal.fastinfoset.tools.FI_DOM_Or_XML_DOM_SAX_SAXEvent;
 import handlers.ioHandler.Command;
 import items.Item;
 import handlers.ioHandler.InputHandler;
@@ -9,6 +10,7 @@ import handlers.ioHandler.OutputHandler;
 import handlers.ioHandler.FileInputHandler;
 import map.Map;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -76,10 +78,8 @@ public class GameMaster {
         player.setDamage();
     }
 
-    private void stopGameIfMissingFile() {
-        if (FileInputHandler.fileMissing){
-            System.exit(1);
-        }
+    static void stopGame() {
+        System.exit(1);
     }
 
     private void battle(){
@@ -168,7 +168,7 @@ public class GameMaster {
         playerCords[0] = player.x_cord;
         playerCords[1] = player.y_cord;
 
-        if (checkHitObject(map.enemyPositionList)){
+        if (checkHitObject(map.enemyPositionList)) {
             battle();
         } else if (checkHitObject(map.weaponPositionList)){
             pickUpItem(playerCords, dataHandler.weaponList, map.weaponPositionList);

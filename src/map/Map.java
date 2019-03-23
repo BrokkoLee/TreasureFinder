@@ -2,6 +2,7 @@ package map;
 
 import handlers.ioHandler.FileInputHandler;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class Map {
@@ -14,7 +15,7 @@ public class Map {
     public ArrayList<int[]> enemyPositionList = new ArrayList<>();
     public ArrayList<int[]> treasurePositionList = new ArrayList<>();
 
-    public void loadLocations() {
+    public void loadLocations() throws FileNotFoundException {
         FileInputHandler.inputPositionsToList(wallPositionList, "walls");
         FileInputHandler.inputPositionsToList(potionPositionList, "potionLocation");
         FileInputHandler.inputPositionsToList(weaponPositionList, "weaponLocation");

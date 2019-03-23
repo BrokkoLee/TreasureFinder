@@ -15,7 +15,7 @@ public class OutputHandler {
     public static void introduction(){
         System.out.println("Welcome to TreasureFinder!");
         System.out.println("Your goal is to find the lost treasure.");
-        System.out.println("On your journey you will have to fight with different creatures.");
+        System.out.println("On your journey you will face a lot of different creatures.");
         System.out.println("Good luck!");
     }
 

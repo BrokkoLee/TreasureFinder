@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class InputHandler {
     private static Scanner sc = new Scanner(System.in);
 
-    public static boolean either(String givenWord, String[] list) {
+    private static boolean either(String givenWord, String[] list) {
         for (String word : list) {
             if (word.equals(givenWord)) return true;
         }
@@ -13,6 +13,7 @@ public class InputHandler {
     }
 
     public static Command getChoice() {
+        //TODO fix input with space eg.:
         OutputHandler.showChoices();
         String input = getInput();
         while (true) {
