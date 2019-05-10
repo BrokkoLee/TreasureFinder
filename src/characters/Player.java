@@ -1,14 +1,16 @@
 package characters;
 
+import handlers.gameHandler.GameMaster;
+import handlers.ioHandler.InputHandler;
+import handlers.ioHandler.OutputHandler;
 import items.Item;
 import items.Potion;
 import items.Weapon;
 import map.Map;
-import handlers.ioHandler.InputHandler;
-import handlers.ioHandler.OutputHandler;
-import handlers.gameHandler.GameMaster;
 
 import java.util.ArrayList;
+
+import static handlers.gameHandler.GameMaster.is_colliding;
 
 public class Player extends Character {
     public int maxHealth = 20;
@@ -109,46 +111,42 @@ public class Player extends Character {
         }
     }
 
-    public void move(Map map, GameMaster gameMaster) {
-        int oldXCord = x_cord;
-        int oldYCord = y_cord;
+    public void move(Map map) {
+        int[] oldCords = {x_cord, y_cord};
+        String direction;
 
         OutputHandler.showCurrentLocation(x_cord, y_cord);
         OutputHandler.showDirections();
 
-        boolean hasMoved = false;
-        String direction;
+        direction = InputHandler.getDirection();
 
-        while (!hasMoved) {
-            direction = InputHandler.getDirection();
-            switch (direction) {
-                case "North":
-                    y_cord += 1;
-                    hasMoved = true;
-                    break;
-                case "South":
-                    y_cord -= 1;
-                    hasMoved = true;
-                    break;
-                case "West":
-                    x_cord += -1;
-                    hasMoved = true;
-                    break;
-                case "East":
-                    x_cord += 1;
-                    hasMoved = true;
-                    break;
-                default:
-                    OutputHandler.showWrongDirection();
-                    OutputHandler.showDirections();
-                    break;
-            }
+        switch (direction) {
+            case "North":
+                y_cord += 1;
+                break;
+            case "South":
+                y_cord -= 1;
+                break;
+            case "West":
+                x_cord += -1;
+                break;
+            case "East":
+                x_cord += 1;
+                break;
+            default:
+                OutputHandler.showWrongDirection();
+                OutputHandler.showDirections();
+                break;
         }
 
-        //TODO fix bug: hit wall -> new direction printed n times
-        gameMaster.collision(map, oldXCord, oldYCord); //HitWall recursive shit calling move()
-                                                        // again -> newLocation printed n times.
-        OutputHandler.showNewLocation(x_cord, y_cord);
+        if (is_colliding(x_cord, y_cord, map.wallPositionList)) {
+            OutputHandler.showHitWall();
+            x_cord = oldCords[0];
+            y_cord = oldCords[1];
+            move(map);
+        } else {
+            OutputHandler.showNewLocation(x_cord, y_cord);
+        }
     }
 
     @Override

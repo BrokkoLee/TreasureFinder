@@ -2,15 +2,12 @@ package handlers.gameHandler;
 
 import characters.Enemy;
 import characters.Player;
-import com.sun.xml.internal.fastinfoset.tools.FI_DOM_Or_XML_DOM_SAX_SAXEvent;
 import handlers.ioHandler.Command;
 import items.Item;
 import handlers.ioHandler.InputHandler;
 import handlers.ioHandler.OutputHandler;
-import handlers.ioHandler.FileInputHandler;
 import map.Map;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -20,22 +17,22 @@ public class GameMaster {
     private Player player = new Player();
     private DataHandler dataHandler = new DataHandler();
 
-    public void playGame(){
+    public void playGame() {
         dataHandler.loadData(map);
         setDefaultStats();
         OutputHandler.introduction();
         runGame();
     }
 
-    private void runGame(){
-        while (true){
+    private void runGame() {
+        while (true) {
             OutputHandler.showNewLine();
             Command choice = InputHandler.getChoice();
             OutputHandler.showNewLine();
 
             switch (choice) {
                 case move:
-                    player.move(map, this);
+                    player.move(map);
                     break;
                 case stats:
                     OutputHandler.showStats(player, map);
@@ -63,7 +60,7 @@ public class GameMaster {
         }
     }
 
-    private void setDefaultStats(){
+    private void setDefaultStats() {
         //TODO input default stats from file
         player.name = InputHandler.getPlayerName();
 
@@ -82,7 +79,7 @@ public class GameMaster {
         System.exit(1);
     }
 
-    private void battle(){
+    private void battle() {
         int tier = getTier();
 
         Enemy enemy = getRandomCreature(tier);
@@ -93,10 +90,10 @@ public class GameMaster {
         attackPhase(enemy);
     }
 
-    private void attackPhase(Enemy enemy ){
+    private void attackPhase(Enemy enemy) {
         //TODO remove forever loop
-        while (true){
-            if (player.health > 0){
+        while (true) {
+            if (player.health > 0) {
                 player.attackPhase(enemy, player);
             } else {
                 OutputHandler.playerDied();
@@ -116,16 +113,16 @@ public class GameMaster {
     }
 
     private int getTier() {
-        if (player.x_cord < 3){
+        if (player.x_cord < 3) {
             return 1;
-        } else if (player.x_cord < 6){
+        } else if (player.x_cord < 6) {
             return 2;
         } else {
             return 3;
         }
     }
 
-    private void pickUpItem(int[] itemCords, ArrayList<Item> itemList, ArrayList<int[]> itemCordsList){
+    private void pickUpItem(int[] itemCords, ArrayList<Item> itemList, ArrayList<int[]> itemCordsList) {
         int tier = getTier();
 
         Item item = getRandomItem(tier, itemList);
@@ -134,55 +131,27 @@ public class GameMaster {
         removeCords(itemCords, itemCordsList);
     }
 
-    private void removeCords(int[] itemCords, ArrayList<int[]> cordsList){
+    private void removeCords(int[] itemCords, ArrayList<int[]> cordsList) {
         for (int[] cords : cordsList) {
-            if (Arrays.equals(cords, itemCords)){
+            if (Arrays.equals(cords, itemCords)) {
                 cordsList.remove(cords);
                 break;
             }
         }
     }
 
-    private boolean checkHitObject(ArrayList<int[]> list){
-        for (int[] xNy : list) {
-            if (player.x_cord == xNy[0] && player.y_cord == xNy[1]) return  true;
-        }
-
-        return false;
+    public static boolean is_colliding(int x_cord, int y_cord, ArrayList<int[]> bufferCoordinates) {
+        int[] playerCoordinates = {x_cord, y_cord};
+        return is_contains(bufferCoordinates, playerCoordinates);
     }
 
-    private void hitWall(ArrayList<int[]> wallPositionsList, Map map, int oldXCord, int oldYCord){
-        //TODO create new class for coordination
-        for (int[] xNy : wallPositionsList) {
-            while (xNy[0] == player.x_cord && xNy[1] == player.y_cord){
-                player.x_cord = oldXCord;
-                player.y_cord = oldYCord;
-                OutputHandler.showHitWall();
-                player.move(map, this);
-            }
-        }
+    private static boolean is_contains(ArrayList<int[]> mainList, int[] array) {
+        boolean is_containing = false;
+        for (int[] subArray : mainList) if (Arrays.equals(subArray, array)) is_containing = true;
+        return is_containing;
     }
 
-    public void hitObject(Map map, int oldXCord, int oldYCord){
-        int[] playerCords = new int[2];
-        playerCords[0] = player.x_cord;
-        playerCords[1] = player.y_cord;
-
-        if (checkHitObject(map.enemyPositionList)) {
-            battle();
-        } else if (checkHitObject(map.weaponPositionList)){
-            pickUpItem(playerCords, dataHandler.weaponList, map.weaponPositionList);
-        } else if (checkHitObject(map.potionPositionList)) {
-            pickUpItem(playerCords, dataHandler.potionList, map.potionPositionList);
-        } else if (checkHitObject(map.wallPositionList)) {
-            hitWall(map.wallPositionList, map, oldXCord, oldYCord);
-        } else if (checkHitObject(map.treasurePositionList)){
-            wonGame();
-        }
-
-    }
-
-    public static void addItemToInventory(Item item, ArrayList<Item> inventory){
+    public static void addItemToInventory(Item item, ArrayList<Item> inventory) {
         inventory.add(item);
     }
 
@@ -193,21 +162,21 @@ public class GameMaster {
         for (Enemy creature : dataHandler.creatureList)
             if (creature.tier == tier) creatureList.add(creature);
 
-            int randomIndex = (int)(Math.random() * creatureList.size() ) + 1;
+        int randomIndex = (int) (Math.random() * creatureList.size()) + 1;
 
-        enemy = creatureList.get(randomIndex-1);
+        enemy = creatureList.get(randomIndex - 1);
         return enemy;
     }
 
-    private Item getRandomItem(int tier, ArrayList<Item> itemList){
+    private Item getRandomItem(int tier, ArrayList<Item> itemList) {
         ArrayList<Item> randomSpecItems = new ArrayList<>();
 
         for (Item item : itemList)
             if (item.tier == tier) randomSpecItems.add(item);
 
-        int randomIndex = (int)(Math.random() * randomSpecItems.size()) + 1;
+        int randomIndex = (int) (Math.random() * randomSpecItems.size()) + 1;
 
-        return randomSpecItems.get(randomIndex-1);
+        return randomSpecItems.get(randomIndex - 1);
     }
 
     private void wonGame() {

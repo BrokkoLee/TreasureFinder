@@ -19,8 +19,8 @@ public class OutputHandler {
         System.out.println("Good luck!");
     }
 
-    public static void showMissingFile(String fileName){
-        System.out.println("Missing file: " + fileName + ".txt" );
+    public static void showMissingFile(Exception FileNotFoundE){
+        System.out.println("Missing file: " + FileNotFoundE);
     }
 
     public static void showDirections(){
@@ -240,7 +240,7 @@ public class OutputHandler {
     }
 
     public static void showEnemyInfo(Enemy enemy) {
-        System.out.println("Your enemy info:");
+        System.out.println("Your enemy's info:");
         System.out.println("Name: " + enemy.name);
         System.out.println("Health: " + enemy.health);
         System.out.println("Attack damage: " + enemy.damage);
